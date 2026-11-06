@@ -1,17 +1,21 @@
-# Free demo on Render: Dashboard → New → Blueprint → pick this repo.
-# The free plan sleeps after 15 idle minutes and has no persistent disk; use a Postgres DATABASE_URL to keep data.
+# Free public demo on Render: Dashboard -> New -> Blueprint -> pick the oncallpilot repo -> Apply.
+# Runs in demo mode (mock Teams, phone, email, ServiceNow) with time 60x faster.
+# The free plan sleeps after 15 idle minutes (about a minute to wake up) and has no persistent disk,
+# so incidents are cleared on every deploy or restart. That's fine for a demo.
 services:
   - type: web
     name: oncallpilot
     runtime: docker
     plan: free
+    autoDeploy: true            # redeploy on every push to main
     healthCheckPath: /api/health
     envVars:
-      - key: SECRET_KEY
+      - key: SECRET_KEY         # signs acknowledge links
+        generateValue: true
+      - key: UAC_WEBHOOK_SECRET # keeps the public UAC webhook closed to strangers
         generateValue: true
       - key: TIME_SCALE
         value: "60"
-      - key: LLM_API_KEY
+      - key: LLM_API_KEY        # optional: a free Groq key turns on LLM triage and screenshot reading
         sync: false
-      - key: PUBLIC_BASE_URL
-        sync: false
+# PUBLIC_BASE_URL is picked up from Render's RENDER_EXTERNAL_URL automatically.

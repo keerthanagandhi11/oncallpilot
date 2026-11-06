@@ -48,6 +48,16 @@ Optional: put a free Groq key in `LLM_API_KEY` for LLM triage and screenshot rea
 
 With Docker (app + Postgres): `docker compose up --build`.
 
+## Deploy a free public demo (Render)
+
+1. Push this repo to GitHub.
+2. In Render: **New → Blueprint**, pick the repo, then **Apply**. [render.yaml](render.yaml) sets everything:
+   demo mode, time ×60, and random `SECRET_KEY` and `UAC_WEBHOOK_SECRET` values.
+3. Optional: add a free Groq key as `LLM_API_KEY` for LLM triage and screenshot reading.
+
+The app reads its public address from Render, so the acknowledge links work with no extra setting. On the
+free plan it sleeps after 15 idle minutes, and incidents are cleared on each deploy or restart.
+
 ## How it works
 
 ```
@@ -116,7 +126,7 @@ app/
   api/routes.py         REST, webhooks, ack pages
   static/               dashboard (HTML + vanilla JS)
 config/                 teams.yaml, oncall_demo.yaml
-tests/                  69 tests: state machine with a fake clock, API, security, adapters
+tests/                  70 tests: state machine with a fake clock, API, security, adapters
 ```
 
 ## Testing

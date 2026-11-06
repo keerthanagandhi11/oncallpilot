@@ -216,3 +216,13 @@ def test_fake_clock():
     c = FakeClock()
     t0 = c.now()
     assert (c.advance(minutes=5) - t0).total_seconds() == 300
+
+
+def test_public_url_from_render(monkeypatch):
+    from app.config import Settings
+
+    monkeypatch.setenv("RENDER_EXTERNAL_URL", "https://oncallpilot.onrender.com/")
+    assert Settings(_env_file=None).public_base_url == "https://oncallpilot.onrender.com"
+    assert (
+        Settings(_env_file=None, public_base_url="https://ops.example.com").public_base_url == "https://ops.example.com"
+    )

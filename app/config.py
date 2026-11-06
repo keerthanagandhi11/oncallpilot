@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -101,6 +102,13 @@ class Settings(BaseSettings):
     @classmethod
     def _strip(cls, v: str) -> str:
         return (v or "").strip()
+
+    @model_validator(mode="after")
+    def _platform_url(self) -> Settings:
+        # Render (and similar hosts) tell the app its public address; use it for ack links.
+        if self.public_base_url == "http://localhost:8000" and os.environ.get("RENDER_EXTERNAL_URL"):
+            self.public_base_url = os.environ["RENDER_EXTERNAL_URL"].rstrip("/")
+        return self
 
     @property
     def llm_enabled(self) -> bool:
