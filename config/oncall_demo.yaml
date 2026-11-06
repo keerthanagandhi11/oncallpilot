@@ -1,0 +1,15 @@
+# Demo on-call roster used when ONCALL_PROVIDER=mock (stands in for ServiceNow).
+# Fake names and numbers.
+groups:
+  Payments App Support:
+    primary:   { name: Arjun Mehta,    email: arjun.mehta@example.com,    phone: "+919800000101" }
+    secondary: { name: Priya Nair,     email: priya.nair@example.com,     phone: "+919800000102" }
+    manager:   { name: Rahul Iyer,     email: rahul.iyer@example.com,     phone: "+919800000103" }
+  CDP App Support:
+    primary:   { name: Sneha Kulkarni, email: sneha.kulkarni@example.com, phone: "+919800000201" }
+    secondary: { name: Vikram Rao,     email: vikram.rao@example.com,     phone: "+919800000202" }
+    manager:   { name: Anita Desai,    email: anita.desai@example.com,    phone: "+919800000203" }
+  Batch Operations:
+    primary:   { name: Karthik S,      email: karthik.s@example.com,      phone: "+919800000301" }
+    secondary: { name: Divya Menon,    email: divya.menon@example.com,    phone: "+919800000302" }
+    manager:   { name: Suresh Babu,    email: suresh.babu@example.com,    phone: "+919800000303" }

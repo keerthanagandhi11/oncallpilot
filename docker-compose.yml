@@ -1,0 +1,26 @@
+# Production-like stack: OnCallPilot + Postgres.  docker compose up --build  →  http://localhost:8000
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: oncallpilot
+      POSTGRES_PASSWORD: oncallpilot
+      POSTGRES_DB: oncallpilot
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oncallpilot"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://oncallpilot:oncallpilot@db:5432/oncallpilot
+    ports: ["8000:8000"]
+    depends_on:
+      db: { condition: service_healthy }
+    restart: unless-stopped
+
+volumes:
+  pgdata:

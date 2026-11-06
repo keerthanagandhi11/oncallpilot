@@ -1,0 +1,17 @@
+# Free demo on Render: Dashboard → New → Blueprint → pick this repo.
+# The free plan sleeps after 15 idle minutes and has no persistent disk; use a Postgres DATABASE_URL to keep data.
+services:
+  - type: web
+    name: oncallpilot
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: TIME_SCALE
+        value: "60"
+      - key: LLM_API_KEY
+        sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false

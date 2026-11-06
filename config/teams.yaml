@@ -1,0 +1,54 @@
+# Application support teams, how failures are routed to them, and how they are escalated.
+# ${VAR} is replaced by the environment variable VAR; ${VAR:-text} uses "text" if VAR is unset.
+
+fallback_team: batch-ops   # owner of any task that matches no team below
+
+teams:
+  - id: payments
+    name: Payments Application Support
+    servicenow_group: Payments App Support      # on-call rota group
+    # assignment_group: Payments L2 Queue       # queue the incident is transferred to (default: servicenow_group)
+    email_dl: payments-appsupport@example.com
+    teams_webhook_url: ${PAYMENTS_TEAMS_WEBHOOK:-}
+    default_severity: P2
+    match:
+      task_patterns: ["PAY_*", "SETTLE_*", "*_PAYMENTS_*"]
+      business_services: ["Payments"]
+    policy:
+      initial_wait_minutes: 5        # time to reply in Teams before the first call
+      email_dl: before_manager       # at_start | before_manager | on_exhausted
+      answered_counts_as_ack: true
+      levels:
+        - { role: primary,   attempts: 3, interval_minutes: 7 }
+        - { role: secondary, attempts: 3, interval_minutes: 7 }
+        - { role: manager,   attempts: 1, interval_minutes: 5 }
+
+  - id: customer-data
+    name: Customer Data Platform Support
+    servicenow_group: CDP App Support
+    email_dl: cdp-appsupport@example.com
+    teams_webhook_url: ${CDP_TEAMS_WEBHOOK:-}
+    default_severity: P3
+    match:
+      task_patterns: ["CDP_*", "CRM_*", "ETL_CUST_*"]
+    policy:
+      initial_wait_minutes: 5
+      email_dl: before_manager
+      levels:
+        - { role: primary,   attempts: 3, interval_minutes: 10 }
+        - { role: secondary, attempts: 2, interval_minutes: 10 }
+        - { role: manager,   attempts: 1, interval_minutes: 5 }
+
+  - id: batch-ops
+    name: Batch Operations (catch-all)
+    servicenow_group: Batch Operations
+    email_dl: batch-ops@example.com
+    teams_webhook_url: ${BATCHOPS_TEAMS_WEBHOOK:-}
+    default_severity: P3
+    policy:
+      initial_wait_minutes: 5
+      email_dl: on_exhausted
+      levels:
+        - { role: primary,   attempts: 3, interval_minutes: 5 }
+        - { role: secondary, attempts: 3, interval_minutes: 5 }
+        - { role: manager,   attempts: 1, interval_minutes: 5 }

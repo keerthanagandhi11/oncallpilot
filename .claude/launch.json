@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "oncallpilot",
+      "runtimeExecutable": ".venv/bin/uvicorn",
+      "runtimeArgs": ["app.main:create_app", "--factory", "--port", "8020"],
+      "port": 8020
+    }
+  ]
+}
