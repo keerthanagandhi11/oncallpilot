@@ -9,6 +9,9 @@ It replaces the manual SysOps routine: watch the UAC dashboard, take a screensho
 look up the rota in ServiceNow, call the primary 3 times 5 to 10 minutes apart, then the secondary,
 then the manager, then email the DL.
 
+**Live demo:** **https://oncallpilot.onrender.com** (demo mode with mock Teams, phone, email and ServiceNow; time
+runs 60× faster; the first visit after 15 idle minutes takes about a minute to wake up)
+
 **Design and reasoning:** [docs/BLUEPRINT.md](docs/BLUEPRINT.md) · **Connecting real systems:** [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md)
 
 ![flow](https://img.shields.io/badge/UAC_failure-→_AI_triage_→_Teams_→_call_ladder_→_DL_email-d9480f)
